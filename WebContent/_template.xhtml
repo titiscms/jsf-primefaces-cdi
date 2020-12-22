@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://xmlns.jcp.org/jsf/html"
+	  xmlns:f="http://xmlns.jcp.org/jsf/core"
+	  xmlns:p="http://primefaces.org/ui"
+	  xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+	<h:head>
+		<style>
+			.ui-menuitem-text {
+				margin: 0 10px 0 10px;
+			}
+			.ui-menu.ui-menu-dynamic {
+				width: 250px;
+			}
+		</style>
+	</h:head>
+	
+	<h:body>
+		<div id="cabecalho">
+			<h:panelGrid columns="2">
+				<h:graphicImage library="img" name="logo.png" />
+				
+				<h:form rendered="#{usuarioLogado != null}">
+					<p:themeSwitcher id="basic" style="width:165px; position: absolute; right: 10px;" value="#{temaBean.tema}">
+						<f:selectItem itemLabel="Choose Theme" itemValue="" />
+						<f:selectItems itemLabel="#{tema}" itemValue="#{tema}" value="#{temaBean.temas}" var="tema" />
+						<f:ajax />
+					</p:themeSwitcher>
+				</h:form>
+			</h:panelGrid>
+			
+			<p:growl id="messages" showDetail="true" />
+			
+			<h:form rendered="#{usuarioLogado != null}">
+				
+				<p:menuButton value="Menu">
+					<p:menuitem value="#{sessionScope['usuarioLogado'].email}" icon="fa fa-user" />
+					<p:separator />
+					<p:menuitem value="Autores" action="autor?faces-redirect=true" icon="fa fa-fw fa-edit" />
+					<p:menuitem value="Livros" action="livro?faces-redirect=true" icon="fa fa-fw fa-edit" />
+					<p:menuitem value="Vendas" action="vendas?faces-redirect=true" icon="fa fa-fw fa-image" />
+					<p:separator />
+					<p:menuitem value="Logout" action="#{loginBean.deslogar}" ajax="false" icon="fa fa-fw fa-sign-out" />
+				</p:menuButton>
+			</h:form>
+			
+			<h1><ui:insert name="titulo"></ui:insert></h1>
+		</div>
+		
+		<div id="conteudo">
+			<ui:insert name="conteudo"></ui:insert>
+		</div>
+				
+		<div id="rodape" style="text-align: center;">
+			<p>Alura copyright 2020 - <ui:insert name="texto"></ui:insert></p>
+		</div>
+	</h:body>
+
+</html>

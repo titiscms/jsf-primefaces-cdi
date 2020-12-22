@@ -1,0 +1,13 @@
+build/
+
+.classpath
+.factorypath
+.project
+.settings/
+.git/
+.metadata/
+
+.DS_Store
+MANIFEST.MF
+
+
