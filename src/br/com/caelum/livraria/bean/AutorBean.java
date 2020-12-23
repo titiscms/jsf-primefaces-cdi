@@ -1,23 +1,28 @@
 package br.com.caelum.livraria.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 
-import br.com.caelum.livraria.dao.DAO;
+import br.com.caelum.livraria.dao.AutorDao;
 import br.com.caelum.livraria.modelo.Autor;
 import br.com.caelum.livraria.util.RedirectView;
 
-@ManagedBean
+@Named
 @ViewScoped
-public class AutorBean {
+public class AutorBean implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
 	
 	// atributos 
 	private Autor autor = new Autor();
 	private Integer autorId;
-	
-	
+	@Inject
+	private AutorDao autorDao;
+		
 	// getters e setters
 	public Integer getAutorId() {
 		return autorId;
@@ -46,9 +51,9 @@ public class AutorBean {
 		System.out.println("Gravando autor " + this.autor.getNome());
 
 		if (this.autor.getId() == null) {
-			new DAO<Autor>(Autor.class).adiciona(this.autor);
+			this.autorDao.adiciona(this.autor);
 		} else {
-			new DAO<Autor>(Autor.class).atualiza(this.autor);
+			this.autorDao.atualiza(this.autor);
 		}
 		
 		this.autor = new Autor();
@@ -65,9 +70,7 @@ public class AutorBean {
 	public List<Autor> getAutores() {
 		System.out.println("Inicio do método getAutores()");
 		
-		DAO<Autor> dao = new DAO<Autor>(Autor.class);
-		
-		List<Autor> autores = dao.listaTodos();
+		List<Autor> autores = this.autorDao.listaTodos();
 		
 		System.out.println("Fim do método getAutores()");
 		return autores;
@@ -80,10 +83,8 @@ public class AutorBean {
 	public void remover(Autor autor) {
 		System.out.println("Inicio do método remover()");
 		
-		DAO<Autor> dao = new DAO<Autor>(Autor.class);
-		
 		System.out.println("Fim do método remover()");
-		dao.remove(autor);
+		this.autorDao.remove(autor);
 	}
 	
 	/**
@@ -105,7 +106,7 @@ public class AutorBean {
 		System.out.println("Inicio do método carregarAutorPorId()");
 		
 		System.out.println("Fim do método carregarAutorPorId()");
-		this.autor = new DAO<Autor>(Autor.class).buscaPorId(this.autorId);
+		this.autor = this.autorDao.buscaPorId(this.autorId);
 	}
 	
 }

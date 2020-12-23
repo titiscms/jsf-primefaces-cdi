@@ -43,10 +43,7 @@
 						</p:inputNumber>
 		
 						<p:outputLabel value="Data de Lançamento:" for="dataLancamento" />
-						<p:calendar id="dataLancamento" value="#{livroBean.livro.dataLancamento.time}" pattern="dd/MM/yyyy HH:mm:ss" mask="true">
-							<!-- <f:passThroughAttribute name="type" value="date" /> -->
-							<!-- <f:convertDateTime pattern="dd/MM/yyyy HH:mm" /> -->
-						</p:calendar>
+						<p:calendar id="dataLancamento" value="#{livroBean.livro.dataLancamento.time}" pattern="dd/MM/yyyy HH:mm:ss" mask="true" />
 		
 					</p:panelGrid>
 				</p:fieldset>
@@ -74,18 +71,6 @@
 						
 						#{autor.nome}	
 					</p:dataList>
-					
-					<!--  Se for usar o <p:dataTable> realizar os ajustes necessários
-					<p:dataTable value="" var="autor" id="tabelaAutores" emptyMessage="Nenhum autor cadastrado.">
-						<p:column>
-							<h:outputText value="#{autor.nome}" />
-						</p:column>
-						
-						<p:column>
-							<p:commandLink value="X" action="" update="tabelaAutores" process="@this" />
-						</p:column>
-					</p:dataTable>
-					-->
 				</p:fieldset>
 				
 				<br />

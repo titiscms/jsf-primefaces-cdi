@@ -1,14 +1,20 @@
 package br.com.caelum.livraria.bean;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import java.io.Serializable;
 
-@ManagedBean
+import javax.enterprise.context.SessionScoped;
+import javax.inject.Named;
+
+@Named
 @SessionScoped
-public class TemaBean {
+public class TemaBean implements Serializable {
 
+	private static final long serialVersionUID = 1L;
+	
+	// atributos
 	private String tema = "luna-amber";
 	
+	// getters e setters
 	public String getTema() {
 		return tema;
 	}
@@ -17,8 +23,15 @@ public class TemaBean {
 		this.tema = tema;
 	}
 	
+	// métodos
+	/**
+	 * Método listando todos os temas disponíveis da aplicação
+	 * @return
+	 */
 	public String[] getTemas() {
-		return new String[] {
+		System.out.println("Inicio do método getTemas()");
+		
+		String[] temas = new String[] {
 				"aristo",
 				"luna-amber",
 				"luna-blue",
@@ -66,6 +79,9 @@ public class TemaBean {
 	            "ui-lightness", 
 	            "vader"
 		};
+		
+		System.out.println("Fim do método getTemas()");
+		return temas;
 	}
 	
 }

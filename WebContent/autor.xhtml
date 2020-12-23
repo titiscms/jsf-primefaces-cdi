@@ -46,16 +46,9 @@
 			
 			<h:form id="formTabelaAutores">
 				<p:dataList value="#{autorBean.autores}" var="autor" type="definition" >
+					
 					<f:facet name="header">Autores</f:facet>
 					
-					<!-- Se voltar a usar o <p:commandoLink>, ajustar o action o update
-					<p:commandLink value="altera" style="float:left; margin: 0 10px 0 10px;" 
-								   styleClass="ui-icon ui-icon-pencil" />
-								   
-					<p:commandLink value="remove" style="float:left; margin-right:10px;" 
-								   styleClass="ui-icon ui-icon-trash" />
-					-->
-												   
 					<p:commandButton action="#{autorBean.carregar(autor)}" style="margin: 0 10px 0 10px;" 
 									 icon="fa fa-fw fa-edit" update=":formAutor" />
 									 
@@ -63,6 +56,7 @@
 									 icon="fa fa-fw fa-remove" update="@form" />
 					
 					#{autor.nome} - #{autor.email}
+					
 				</p:dataList>
 			</h:form>
 		</ui:define>

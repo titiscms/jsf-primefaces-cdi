@@ -4,26 +4,33 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 
-import br.com.caelum.livraria.dao.DAO;
+import br.com.caelum.livraria.dao.AutorDao;
+import br.com.caelum.livraria.dao.LivroDao;
 import br.com.caelum.livraria.modelo.Autor;
 import br.com.caelum.livraria.modelo.Livro;
 
-@ManagedBean
+@Named
 @ViewScoped
 public class LivroBean implements Serializable {
 
-	// atributos
 	private static final long serialVersionUID = 1L;
+
+	// atributos
 	private Livro livro = new Livro();
 	private Integer autorId;
 	private Integer livroId;
 	private List<Livro> livros;
+	@Inject
+	private LivroDao livroDao;
+	@Inject
+	private AutorDao autorDao;
 	
 	// getters e setters
 	public Livro getLivro() {
@@ -56,12 +63,13 @@ public class LivroBean implements Serializable {
 	 * @return
 	 */
 	public List<Livro> getLivros() {
-		DAO<Livro> dao = new DAO<Livro>(Livro.class);
+		System.out.println("Inicio do método getLivros()");
 		
 		if (this.livros == null) {
-			this.livros = dao.listaTodos();
+			this.livros = this.livroDao.listaTodos();
 		}
 		
+		System.out.println("Fim do método getLivros()");
 		return livros;
 	}
 
@@ -69,22 +77,25 @@ public class LivroBean implements Serializable {
 	 * Método para salvar um livro na base de dados
 	 */
 	public void gravar() {
+		System.out.println("Inicio do método gravar()");
 		System.out.println("Gravando livro " + this.livro.getTitulo());
 
 		if (livro.getAutores().isEmpty()) {
 			FacesContext.getCurrentInstance().addMessage("autor", 
 					new FacesMessage("Livro deve ter pelo menos um Autor."));
+			
+			System.out.println("Fim do método gravar()");
 			return;
 		}
 
-		DAO<Livro> dao = new DAO<Livro>(Livro.class);
-		
 		if (this.livro.getId() == null) {
-			dao.adiciona(this.livro);
-			this.livros = dao.listaTodos();
+			this.livroDao.adiciona(this.livro);
+			this.livros = this.livroDao.listaTodos();
 		} else {
-			dao.atualiza(this.livro);
+			this.livroDao.atualiza(this.livro);
 		}
+		
+		System.out.println("Fim do método gravar()");
 		
 		this.livro = new Livro();
 	}
@@ -94,10 +105,13 @@ public class LivroBean implements Serializable {
 	 * @param livro
 	 */
 	public void remover(Livro livro) {
+		System.out.println("Inicio do método remover()");
 		System.out.println("Removendo livro " + livro.getTitulo());
-		DAO<Livro> dao = new DAO<Livro>(Livro.class);
-		dao.remove(livro);
-		this.livros = dao.listaTodos();
+		
+		this.livroDao.remove(livro);
+		
+		System.out.println("Fim do método remover()");
+		this.livros = this.livroDao.listaTodos();
 	}
 	
 	/**
@@ -105,7 +119,10 @@ public class LivroBean implements Serializable {
 	 * @param livro
 	 */
 	public void carregar(Livro livro) {
+		System.out.println("Inicio do método carregar()");
 		System.out.println("Carregando livro " + livro.getTitulo());
+		
+		System.out.println("Fim do método carregar()");
 		this.livro = livro;
 	}
 	
@@ -114,7 +131,13 @@ public class LivroBean implements Serializable {
 	 * passando o livroId por query params
 	 */
 	public void carregarLivroPorId() {
-		this.livro = new DAO<Livro>(Livro.class).buscaPorId(livroId);
+		System.out.println("Inicio do método carregarLivroPorId()");
+		
+		Livro livro = this.livroDao.buscaPorId(livroId);
+		
+		System.out.println("Fim do método carregarLivroPorId()");
+		
+		this.livro = livro;
 	}
 	
 	/**
@@ -125,8 +148,12 @@ public class LivroBean implements Serializable {
 	 * @throws ValidatorException
 	 */
 	public void comecaComDigitoUm(FacesContext fc, UIComponent component, Object inputValue) throws ValidatorException {
+		System.out.println("Inicio do método comecaComDigitoUm()");
+		
 		String valor = inputValue.toString();
 		if (!valor.startsWith("1")) {
+			System.out.println("fim do método comecaComDigitoUm()");
+			
 			throw new ValidatorException(
 					new FacesMessage("ISBN deveria começar com dígito 1."));
 		}
@@ -137,18 +164,24 @@ public class LivroBean implements Serializable {
 	 * @return
 	 */
 	public String formAutor() {
+		System.out.println("Inicio do método formAutor()");
 		System.out.println("Chamando o formulário do autor");
+		
+		System.out.println("Fim do método formAutor()");
 		return "autor?faces-redirect=true";
 	}
 	
 	/**
 	 * Método para associar um autor num livro
 	 */
-	public void gravarAutor() {		
-		Autor autor = new DAO<Autor>(Autor.class).buscaPorId(this.autorId);
+	public void gravarAutor() {
+		System.out.println("Inicio do método gravarAutor()");
+		
+		Autor autor = this.autorDao.buscaPorId(this.autorId);
 		
 		System.out.println("Gravando autor " + autor.getNome() + " no livro");
 		
+		System.out.println("Fim do método gravarAutor()");
 		this.livro.adicionaAutor(autor);
 	}
 	
@@ -157,7 +190,10 @@ public class LivroBean implements Serializable {
 	 * @param autor
 	 */
 	public void removerAutorDoLivro(Autor autor) {
+		System.out.println("Inicio do método removerAutorDoLivro()");
 		System.out.println("Removendo autor " + autor.getNome() + " do livro");
+		
+		System.out.println("Fim do método removerAutorDoLivro()");
 		this.livro.removeAutor(autor);
 	}
 	
@@ -166,7 +202,12 @@ public class LivroBean implements Serializable {
 	 * @return
 	 */
 	public List<Autor> getAutores() {
-		return new DAO<Autor>(Autor.class).listaTodos();
+		System.out.println("Inicio do método getAutores()");
+
+		List<Autor> autores = this.autorDao.listaTodos();
+		
+		System.out.println("Fim do método getAutores()");
+		return autores;
 	}
 	
 	/**
@@ -174,6 +215,9 @@ public class LivroBean implements Serializable {
 	 * @return
 	 */
 	public List<Autor> getAutoresDoLivro() {
+		System.out.println("Inicio do método getAutoresDoLivro()");
+		
+		System.out.println("Fim do método getAutoresDoLivro()");
 		return this.livro.getAutores();
 	}
 	
