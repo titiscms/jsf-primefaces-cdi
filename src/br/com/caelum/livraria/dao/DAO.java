@@ -17,31 +17,16 @@ public class DAO<T> {
 	}
 
 	public void adiciona(T t) {
-
-		// abre transacao
-		manager.getTransaction().begin();
-
 		// persiste o objeto
 		manager.persist(t);
-
-		// commita a transacao
-		manager.getTransaction().commit();
 	}
 
 	public void remove(T t) {
-		manager.getTransaction().begin();
-
 		manager.remove(manager.merge(t));
-
-		manager.getTransaction().commit();
 	}
 
 	public void atualiza(T t) {
-		manager.getTransaction().begin();
-
 		manager.merge(t);
-
-		manager.getTransaction().commit();
 	}
 
 	public List<T> listaTodos() {

@@ -15,6 +15,7 @@ import br.com.caelum.livraria.dao.AutorDao;
 import br.com.caelum.livraria.dao.LivroDao;
 import br.com.caelum.livraria.modelo.Autor;
 import br.com.caelum.livraria.modelo.Livro;
+import br.com.caelum.livraria.transaction.Transacional;
 
 @Named
 @ViewScoped
@@ -76,6 +77,7 @@ public class LivroBean implements Serializable {
 	/**
 	 * Método para salvar um livro na base de dados
 	 */
+	@Transacional
 	public void gravar() {
 		System.out.println("Inicio do método gravar()");
 		System.out.println("Gravando livro " + this.livro.getTitulo());
@@ -104,6 +106,7 @@ public class LivroBean implements Serializable {
 	 * Método para deletar um livro da base de dados
 	 * @param livro
 	 */
+	@Transacional
 	public void remover(Livro livro) {
 		System.out.println("Inicio do método remover()");
 		System.out.println("Removendo livro " + livro.getTitulo());
@@ -174,6 +177,7 @@ public class LivroBean implements Serializable {
 	/**
 	 * Método para associar um autor num livro
 	 */
+	@Transacional
 	public void gravarAutor() {
 		System.out.println("Inicio do método gravarAutor()");
 		
@@ -189,6 +193,7 @@ public class LivroBean implements Serializable {
 	 * Metodo para deletar um autor de um livro especifico
 	 * @param autor
 	 */
+	@Transacional
 	public void removerAutorDoLivro(Autor autor) {
 		System.out.println("Inicio do método removerAutorDoLivro()");
 		System.out.println("Removendo autor " + autor.getNome() + " do livro");
