@@ -15,6 +15,7 @@ import org.primefaces.model.chart.BarChartModel;
 import org.primefaces.model.chart.ChartSeries;
 
 import br.com.caelum.livraria.dao.LivroDao;
+import br.com.caelum.livraria.dao.VendaDao;
 import br.com.caelum.livraria.modelo.Livro;
 import br.com.caelum.livraria.modelo.Venda;
 
@@ -26,6 +27,9 @@ public class VendasBean implements Serializable {
 	
 	@Inject
 	private LivroDao livroDao;
+	@Inject
+	private VendaDao vendaDao;
+	
 
 	// métodos
 	/**
@@ -46,24 +50,15 @@ public class VendasBean implements Serializable {
 	    Axis yAxis = model.getAxis(AxisType.Y);
 	    yAxis.setLabel("Quantidade");
 		
-		ChartSeries vendaSerie2020 = new ChartSeries();
-		vendaSerie2020.setLabel("Vendas 2020");
+		ChartSeries vendaSerie = new ChartSeries();
+		vendaSerie.setLabel("Vendas");
 
-		List<Venda> vendas2020 = getVendas(1234);
-		for (Venda venda : vendas2020) {
-			vendaSerie2020.set(venda.getLivro().getTitulo(), venda.getQuantidade());
+		List<Venda> vendas = getVendas();
+		for (Venda venda : vendas) {
+			vendaSerie.set(venda.getLivro().getTitulo(), venda.getQuantidade());
 		}
 		
-		ChartSeries vendaSerie2019 = new ChartSeries();
-		vendaSerie2019.setLabel("Vendas 2019");
-
-		List<Venda> vendas2019 = getVendas(4321);
-		for (Venda venda : vendas2019) {
-			vendaSerie2019.set(venda.getLivro().getTitulo(), venda.getQuantidade());
-		}
-		
-		model.addSeries(vendaSerie2019);
-		model.addSeries(vendaSerie2020);
+		model.addSeries(vendaSerie);
 
 		System.out.println("Fim do método getVendasModel()");
 		return model;
@@ -74,7 +69,8 @@ public class VendasBean implements Serializable {
 	 * @param seed
 	 * @return
 	 */
-	private List<Venda> getVendas(long seed) {
+	@SuppressWarnings("unused")
+	private List<Venda> getVendasUtil(long seed) {
 		System.out.println("Inicio do método getVendas()");
 
 		List<Livro> livros = this.livroDao.listaTodos();
@@ -90,4 +86,15 @@ public class VendasBean implements Serializable {
 		System.out.println("Fim do método getVendas()");
 		return vendas;
 	}
+	
+	/**
+	 * Método para recuperar a lista de vendas do banco de dados.
+	 * @return
+	 */
+	private List<Venda> getVendas() {
+		List<Venda> vendas = vendaDao.getVendas();
+		
+		return vendas;
+	}
+	
 }
